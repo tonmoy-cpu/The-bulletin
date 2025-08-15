@@ -13,9 +13,17 @@ const NewsGrid = ({ articles, loading, error }) => {
   if (error) {
     return (
       <div className="error-container">
-        <div className="error-icon">⚠️</div>
+        <div className="error-icon">
+          {error.includes('Rate limit') || error.includes('429') ? '⏱️' : 
+           error.includes('API key') || error.includes('403') ? '🔑' : '⚠️'}
+        </div>
         <h3 className="error-title">Something went wrong</h3>
         <p className="error-text">{error}</p>
+        {(error.includes('Rate limit') || error.includes('API key')) && (
+          <p className="error-subtext">
+            Our system is automatically switching to backup servers. Please try again in a moment.
+          </p>
+        )}
         <button className="retry-btn" onClick={() => window.location.reload()}>
           Try again
         </button>
